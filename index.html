@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔮 Gerador Sarah Kali — Banho</title>
+<style>
+:root {
+  --bg: #faf7f5;
+  --card-bg: #ffffff;
+  --text: #2a1a3e;
+  --text-muted: #6b5b7a;
+  --primary: #8b5cf6;
+  --primary-dark: #7c3aed;
+  --success: #10b981;
+  --danger: #ef4444;
+  --border: #e5dfe9;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  padding: 24px 16px;
+}
+.container { max-width: 720px; margin: 0 auto; }
+.header { text-align: center; margin-bottom: 32px; }
+.header h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; color: var(--primary-dark); }
+.header p { color: var(--text-muted); font-size: 15px; }
+.card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
+}
+.card h2 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.form-group { margin-bottom: 16px; }
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.form-group input, .form-group textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 15px;
+  font-family: inherit;
+  background: #fff;
+  color: var(--text);
+  transition: border-color 0.2s;
+}
+.form-group input:focus, .form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+.form-group textarea { resize: vertical; min-height: 80px; }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.btn-primary { background: var(--primary); color: white; width: 100%; }
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-success { background: var(--success); color: white; flex: 1; }
+.btn-success:hover { background: #059669; }
+.btn-danger { background: var(--danger); color: white; flex: 1; }
+.btn-danger:hover { background: #dc2626; }
+.btn-secondary { background: #f3f0f6; color: var(--text); flex: 1; border: 1px solid var(--border); }
+.btn-secondary:hover { background: #ebe5f0; }
+.btn-row { display: flex; gap: 10px; margin-top: 16px; }
+.preview-box {
+  background: #f9f5fc;
+  border: 1px solid #e8dff0;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 12px;
+  max-height: 500px;
+  overflow-y: auto;
+  font-size: 14px;
+  line-height: 1.7;
+}
+.preview-box h2 { font-size: 18px; color: var(--primary-dark); margin: 12px 0 8px; }
+.preview-box h3 { font-size: 15px; color: var(--text); margin: 12px 0 6px; }
+.preview-box p { margin-bottom: 10px; }
+.preview-box ul, .preview-box ol { margin: 8px 0 8px 20px; }
+.preview-box li { margin-bottom: 4px; }
+.preview-box .oracao {
+  background: #fff;
+  border-left: 3px solid var(--primary);
+  padding: 12px 16px;
+  margin: 12px 0;
+  font-style: italic;
+}
+.status {
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  display: none;
+}
+.status.show { display: block; }
+.status.info { background: #dbeafe; color: #1e40af; }
+.status.success { background: #d1fae5; color: #065f46; }
+.status.error { background: #fee2e2; color: #991b1b; }
+.loading {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #fff;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.client-info {
+  background: #fef3c7;
+  border-left: 3px solid #f59e0b;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  color: #78350f;
+}
+.client-info strong { display: block; margin-bottom: 4px; }
+.hidden { display: none; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>🔮 Gerador Sarah Kali</h1>
+    <p>Banho Energético — revisão antes de enviar</p>
+  </div>
+
+  <div id="status" class="status"></div>
+
+  <div class="card" id="form-card">
+    <h2>📋 Dados do Cliente</h2>
+
+    <div id="client-info-box" class="client-info hidden">
+      <strong>Cliente identificado:</strong>
+      <span id="client-id-display"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="subscriber_id">ID do Cliente (ManyChat)</label>
+      <input type="text" id="subscriber_id" placeholder="ex: 954238352" required>
+    </div>
+
+    <div class="form-group">
+      <label for="nome">Nome</label>
+      <input type="text" id="nome" placeholder="ex: Mariane Silva" required>
+    </div>
+
+    <div class="form-group">
+      <label for="intencao">Intenção</label>
+      <input type="text" id="intencao" placeholder="ex: atrair amor, prosperidade, proteção..." required>
+    </div>
+
+    <div class="form-group">
+      <label for="problema">Problema/Situação</label>
+      <textarea id="problema" placeholder="ex: ex se afastou, dificuldade financeira..." required></textarea>
+    </div>
+
+    <button class="btn btn-primary" id="btn-gerar" onclick="gerarPrevia()">
+      ✨ Gerar Prévia do Banho
+    </button>
+  </div>
+
+  <div class="card hidden" id="preview-card">
+    <h2>👁️ Prévia do Banho</h2>
+    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 8px;">
+      Leia com cuidado. Se estiver bom, envie pro cliente. Se não, regenere ou edite os dados.
+    </p>
+    <div class="preview-box" id="preview"></div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="regenerar()">
+        🔄 Regenerar
+      </button>
+      <button class="btn btn-success" id="btn-enviar" onclick="enviarParaCliente()">
+        ✅ Enviar pro Cliente
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+const N8N_BASE = 'https://sarah-n8n.yxt3ob.easypanel.host/webhook';
+const URL_GERAR = N8N_BASE + '/banho-sarah-kali-gerar-texto';
+const URL_ENVIAR = N8N_BASE + '/banho-sarah-kali-aprovar';
+
+let ultimoTexto = '';
+
+// Lê parâmetros da URL (link com dados pré-preenchidos)
+const params = new URLSearchParams(window.location.search);
+if (params.get('subscriber_id')) document.getElementById('subscriber_id').value = params.get('subscriber_id');
+if (params.get('nome')) document.getElementById('nome').value = params.get('nome');
+if (params.get('intencao')) document.getElementById('intencao').value = params.get('intencao');
+if (params.get('problema')) document.getElementById('problema').value = params.get('problema');
+
+if (params.get('subscriber_id')) {
+  document.getElementById('client-info-box').classList.remove('hidden');
+  document.getElementById('client-id-display').textContent = 'ID ' + params.get('subscriber_id');
+}
+
+function showStatus(msg, type) {
+  const el = document.getElementById('status');
+  el.textContent = msg;
+  el.className = 'status show ' + type;
+  if (type === 'success') setTimeout(() => el.classList.remove('show'), 5000);
+}
+
+function getDados() {
+  return {
+    subscriber_id: document.getElementById('subscriber_id').value.trim(),
+    nome: document.getElementById('nome').value.trim(),
+    intencao: document.getElementById('intencao').value.trim(),
+    problema: document.getElementById('problema').value.trim()
+  };
+}
+
+function validar(dados) {
+  if (!dados.subscriber_id) { showStatus('⚠️ ID do cliente é obrigatório', 'error'); return false; }
+  if (!dados.nome) { showStatus('⚠️ Nome é obrigatório', 'error'); return false; }
+  if (!dados.intencao) { showStatus('⚠️ Intenção é obrigatória', 'error'); return false; }
+  if (!dados.problema) { showStatus('⚠️ Problema é obrigatório', 'error'); return false; }
+  return true;
+}
+
+async function gerarPrevia() {
+  const dados = getDados();
+  if (!validar(dados)) return;
+
+  const btn = document.getElementById('btn-gerar');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loading"></span> Gerando banho... (pode levar 1 min)';
+  showStatus('🔮 Gerando texto do banho... aguarde', 'info');
+  document.getElementById('preview-card').classList.add('hidden');
+
+  try {
+    const resp = await fetch(URL_GERAR, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(dados)
+    });
+
+    if (!resp.ok) throw new Error('Erro ' + resp.status);
+
+    const data = await resp.json();
+    const texto = data.texto || data.output || data.banho || data.text || JSON.stringify(data);
+    ultimoTexto = texto;
+
+    document.getElementById('preview').innerHTML = texto;
+    document.getElementById('preview-card').classList.remove('hidden');
+    document.getElementById('preview-card').scrollIntoView({behavior: 'smooth'});
+    showStatus('✨ Banho gerado! Revise antes de enviar.', 'success');
+  } catch (err) {
+    showStatus('❌ Erro ao gerar: ' + err.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '✨ Gerar Prévia do Banho';
+  }
+}
+
+async function regenerar() {
+  if (!confirm('Regenerar o banho com os mesmos dados?')) return;
+  await gerarPrevia();
+}
+
+async function enviarParaCliente() {
+  if (!ultimoTexto) {
+    showStatus('⚠️ Gere a prévia primeiro', 'error');
+    return;
+  }
+  if (!confirm('Confirmar envio do banho pro cliente?\n\nO PDF será gerado e a mensagem chegará no WhatsApp do cliente.')) return;
+
+  const btn = document.getElementById('btn-enviar');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loading"></span> Enviando...';
+  showStatus('📤 Gerando PDF e enviando pro cliente...', 'info');
+
+  try {
+    const dados = getDados();
+    const resp = await fetch(URL_ENVIAR, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        subscriber_id: dados.subscriber_id,
+        nome: dados.nome,
+        intencao: dados.intencao,
+        problema: dados.problema,
+        texto_aprovado: ultimoTexto
+      })
+    });
+
+    if (!resp.ok) throw new Error('Erro ' + resp.status);
+    showStatus('✅ Enviado pro cliente! Pode fechar essa página.', 'success');
+    btn.innerHTML = '✅ Enviado';
+  } catch (err) {
+    showStatus('❌ Erro ao enviar: ' + err.message, 'error');
+    btn.disabled = false;
+    btn.innerHTML = '✅ Enviar pro Cliente';
+  }
+}
+</script>
+</body>
+</html>
